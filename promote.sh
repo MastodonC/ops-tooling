@@ -24,4 +24,6 @@ then
     docker push $NEW_TAG
 
     echo $NEW_TAG
+else
+    exit 1
 fi
