@@ -1,14 +1,10 @@
 #!/usr/bin/env bash
-set +x
-echo -n "Container ID (minus tag, e.g. mastodonc/foobar) "
-read id
 
-ID=${id:?Error: You must provide a container ID}
+# "Promotes" a docker container by re-tagging it with a
+# 'release-%date' tag convention.
 
-echo -n "Container Tag (e.g. latest, git-408aed) "
-read tag
-
-TAG=${tag:?Error: You must provide a container tag}
+ID=${$1:?Error: You must provide a container ID}
+TAG=${$2:?Error: You must provide a container tag}
 FULL_TAG=$(echo $ID:$TAG)
 
 echo "Pulling $FULL_TAG"
