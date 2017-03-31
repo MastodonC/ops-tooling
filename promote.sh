@@ -3,8 +3,8 @@
 # "Promotes" a docker container by re-tagging it with a
 # 'release-%date' tag convention.
 
-ID=${$1:?Error: You must provide a container ID}
-TAG=${$2:?Error: You must provide a container tag}
+ID=${1:?Error: You must provide a container ID}
+TAG=${2:?Error: You must provide a container tag}
 FULL_TAG=$(echo $ID:$TAG)
 
 echo "Pulling $FULL_TAG"
