@@ -19,3 +19,5 @@ docker tag $IMG_ID $NEW_TAG
 
 echo "Pushing $NEW_TAG"
 docker push $NEW_TAG
+
+echo $NEW_TAG
