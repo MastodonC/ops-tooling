@@ -44,17 +44,29 @@ do-delete () {
     fi
 }
 
+slack-notify () {
+    _CHANNEL=$CHANNEL
+    _USER="Kinesis Stream Auditor (via Jenkins)"
+    _TEXT=$1
+    _WEBHOOK="https://hooks.slack.com/services/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"
+    # The payload can not be put into var without serious voodoo
+    if [[ $DRY_RUN -eq 0 ]] ; then
+        echo curl -X POST \
+             --data-urlencode "payload={\"channel\": \"${_CHANNEL}\", \"username\": \"${_USER}\", \"text\": \"${_TEXT}\", \"icon_emoji\": \":fu:\"}" \
+             $_WEBHOOK
+    else
+        curl -X POST \
+             --data-urlencode "payload={\"channel\": \"${_CHANNEL}\", \"username\": \"${_USER}\", \"text\": \"${_TEXT}\", \"icon_emoji\": \":fu:\"}" \
+             $_WEBHOOK
+    fi
+}
+
 do-report () {
     STREAM=$1
     REGION=$2
-    CMD="curl -X POST --data-urlencode 'payload={\"channel\": \"${CHANNEL}\", \"username\": \"list-kinesis-streams.sh\", \"text\": \":warning: Reporting a rogue stream: \\\""${STREAM}\\\"" in region ${REGION}\", \"icon_emoji\": \":fu:\"}' https://hooks.slack.com/services/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"
+    TEXT=":warning: Reporting a rogue stream: ${STREAM} in region ${REGION}"
     echo "Reporting: $STREAM ($REGION)"
-    if [[ $DRY_RUN -eq 0 ]]
-    then
-        echo "(" $CMD ")"
-    else
-        $CMD
-    fi
+    slack-notify $TEXT
 }
 
 can-delete () {
